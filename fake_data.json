@@ -1,0 +1,23 @@
+{
+    "CEID1066":{
+        "name":"Μάθημα 1",
+        "link":"https://upatras-gr.zoom.us/j/99385546396?pwd=WVY0c1FQVVBjc2VIQWdiWWFsN1pWQT09",
+        "days": [ 
+            {"day":"Wednesday", "hours":[21,22]}
+        ]
+    },
+    "CEID1115":{
+        "name":"Μάθημα 2",
+        "link":"https://upatras-gr.zoom.us/j/3189977126?pwd=a05FV3hrYnZhTDVGY3ptVE5nNElIdz09",
+        "days": [ 
+            {"day":"Wednesday", "hours":[22,23]} 
+        ]
+    },
+    "CEID115":{
+        "name":"Μάθημα 3",
+        "link":"https://upatras-gr.zoom.us/j/3189977126?pwd=a05FV3hrYnZhTDVGY3ptVE5nNElIdz09",
+        "days": [ 
+            {"day":"Thursday", "hours":[0,1]} 
+        ]
+    }
+}

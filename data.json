@@ -1,0 +1,42 @@
+{
+    "CEID1066":{
+        "name":"Αριθμητική Ανάλυση και Περιβάλλοντα Υλοποίησης",
+        "link":"https://upatras-gr.zoom.us/j/99385546396?pwd=WVY0c1FQVVBjc2VIQWdiWWFsN1pWQT09",
+        "days": [ 
+            {"day":"Monday", "hours":[14,17]}, 
+            {"day":"Tuesday","hours":[17,19]} 
+        ]
+    },
+    "CEID1115":{
+        "name":"Θεωρία Σημάτων και Συστημάτων",
+        "link":"https://upatras-gr.zoom.us/j/3189977126?pwd=a05FV3hrYnZhTDVGY3ptVE5nNElIdz09",
+        "days": [ 
+            {"day":"Monday", "hours":[17,19]}, 
+            {"day":"Wednesday", "hours":[18,21]} 
+        ]
+    },
+    "CEID_1076":{
+        "name":"Ψηφιακά Ηλεκτρονικά",
+        "link":"https://teams.microsoft.com/l/team/19%3a5050395caf7f46f787e9a1943fcd842b%40thread.tacv2/conversations?groupId=a4a5fb9f-8233-4249-8d30-ad570390d224&tenantId=5a52ab58-42d0-4bb4-b3fc-713dd6822d20",
+        "days": [ 
+            {"day":"Tuesday", "hours":[13,15]},
+            {"day":"Thursday", "hours":[19,21]} 
+        ]
+    },
+    "CEID_ΝΥ233":{
+        "name":"Δομές Δεδομένων",
+        "link":"https://upatras-gr.zoom.us/j/92396242820?pwd=Tlk1QmNjYks3ZmFJc2UwVEtHTE0yUT09",
+        "days": [ 
+            {"day":"Tuesday", "hours":[15,17]}, 
+            {"day":"Thursday","hours":[15,17]} 
+        ]
+    },
+    "CEID1014":{
+        "name":"ΣΥΓΧΡΟΝΑ ΘΕΜΑΤΑ ΑΡΧΙΤΕΚΤΟΝΙΚΗΣ ΥΠΟΛΟΓΙΣΤΩΝ",
+        "link":"https://upatras.webex.com/webappng/sites/upatras/meeting/download/e8f24ebb3e0c44418328b32f89a955bc?siteurl=upatras&MTID=m0d3fd5550d06bccd835ac86330d80337",
+        "days": [
+            {"day":"Wednesday", "hours":[17,18]},
+            {"day":"Thursday","hours":[17,19]}
+        ]
+    }
+}

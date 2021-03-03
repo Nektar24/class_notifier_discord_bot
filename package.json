@@ -1,0 +1,14 @@
+{
+  "name": "ceid-announcer-bot",
+  "version": "1.0.0",
+  "description": "use for posting messages to a channel when a class is online",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nektar",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0"
+  }
+}
