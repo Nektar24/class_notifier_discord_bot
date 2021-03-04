@@ -17,21 +17,21 @@ var Today = days[now.getDay()];
 var Hour = now.getHours();
 var Minute = now.getMinutes();
 
-bot.on("ready",()=>{
+bot.on("ready",async ()=>{
     // initialization
     initialize(Today,Hour);
     // check if the current time is a class time
-    check(Hour);
+    incaseofbotrestart(Hour);
 
-    // keep checking every 5 minutes
-    bot.setInterval(function(){
-        Hour = new Date().getHours();
-        check(Hour);
-    },1000*60*5);
+    run();
 
     // call initialize() once a day
     setTimeout(function(){
+        Hour = new Date().getHours();
+        Today = days[new Date().getDay()];
+        initialize(Today,Hour);
         bot.setInterval(function(){
+            Hour = new Date().getHours();
             Today = days[new Date().getDay()];
             initialize(Today,Hour);
         },1000*60*60*24);
@@ -52,23 +52,39 @@ function initialize(today,hour){
         }
     }
     // sort the array
-    list.sort((a,b) => (a.starting_hour > b.starting_hour) ? 1 : ((b.starting_hour > a.starting_hour) ? -1 : 0))
-    
+    list.sort((a,b) => (a.starting_hour > b.starting_hour) ? 1 : ((b.starting_hour > a.starting_hour) ? -1 : 0));
+
     // remove the classes that we missed for some reason
+    let missing = 0;
     for (i in list){
         if (list[i].ending_hour <= hour){
-            list.shift();
+            missing++;
         }
     }
-    
+    for (let i=0;i<missing;i++) {list.shift();}
 }
 
-function check(hour){
+function run(){
+    let right_now = new Date();
+    let hour = right_now.getHours();
+    let minute = right_now.getMinutes();
+    let current_time = hour*60 + minute;
+    for (obj of list){
+        console.log("Will post [" + obj.name + "] , in : " + (obj.starting_hour*60 - current_time).toString() + " minutes.");
+        bot.setTimeout(() => {
+            sendmessage(obj);
+            console.log("Posted a message");
+        }, (obj.starting_hour*60 - current_time - 5)*60*1000);
+    }
+}
+
+function incaseofbotrestart(hour){
     if (list.length == 0) { return;}
     if (list[0].ending_hour <= hour) {list.shift(); return;}
     if (list[0].starting_hour <= hour) {
         console.log("found a class");
         sendmessage(list[0]);
+        //list.shift();
     }
 }
 
@@ -77,7 +93,7 @@ function sendmessage(obj){
         try {
             // delete the "Δεν πραγματοποιητε μαθημα" μηνυμα
             if (messages[guild]){
-                bot.channels.cache.get(servers[guild]).messages.get(messages[guild].id).delete();
+                bot.channels.cache.get(servers[guild]).messages.fetch(messages[guild].id).delete();
             }
             // post the message on the channel
             console.log("sent message");
@@ -98,7 +114,7 @@ function sendmessage(obj){
             });
             // edit it after the class is done σε "Δεν πραγματοποιητε μαθημα αυτην την στιγμη"
             bot.setTimeout(function(){
-                bot.channels.cache.get(servers[guild]).messages.get(messages[guild].id).then(msg=>{msg.edit(new Discord.MessageEmbed().setTitle("ΤΩΡΑ ΔΕΝ ΕΧΕΙ ΜΑΘΗΜΑ").setColor("#0099ff").setDescription("Δεν πραγματοποιήτε μάθημα αυτην την στιγμή").setTimestamp().setThumbnail("https://images-ext-2.discordapp.net/external/UkX4VyVlMxh6IcSUheoenOeKPdEBzXmRfbj0nx35gdI/https/www.ceid.upatras.gr/sites/all/themes/ceid_theme/logo.png"));});
+                bot.channels.cache.get(servers[guild]).messages.fetch(messages[guild].id).then(msg=>{msg.edit(new Discord.MessageEmbed().setTitle("ΤΩΡΑ ΔΕΝ ΕΧΕΙ ΜΑΘΗΜΑ").setColor("#0099ff").setDescription("Δεν πραγματοποιήτε μάθημα αυτην την στιγμή").setTimestamp().setThumbnail("https://images-ext-2.discordapp.net/external/UkX4VyVlMxh6IcSUheoenOeKPdEBzXmRfbj0nx35gdI/https/www.ceid.upatras.gr/sites/all/themes/ceid_theme/logo.png"));});
             },(obj.ending_hour - obj.starting_hour) * 1000 * 60 * 60 );
             list.shift();  
         } catch (err) {console.error(err);}
@@ -132,5 +148,8 @@ bot.on("message",message=>{
         }
     }
 });
+
+//bot.channels.cache.get("816646510305083403").messages.fetch("817081891131359312").then(msg =>{msg.delete();});
+//bot.channels.cache.get("816646510305083403").messages.fetch("817081892662280194").then(msg=>{msg.edit(new Discord.MessageEmbed().setTitle("ΤΩΡΑ ΔΕΝ ΕΧΕΙ ΜΑΘΗΜΑ").setColor("#0099ff").setDescription("Δεν πραγματοποιήτε μάθημα αυτην την στιγμή").setTimestamp().setThumbnail("https://images-ext-2.discordapp.net/external/UkX4VyVlMxh6IcSUheoenOeKPdEBzXmRfbj0nx35gdI/https/www.ceid.upatras.gr/sites/all/themes/ceid_theme/logo.png"));});
 
 bot.login(config.token);
