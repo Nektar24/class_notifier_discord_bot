@@ -125,7 +125,7 @@ function leftToEight(){
     var d = new Date();
     let remaining = -d + d.setHours(8,0,0,0);
     if (remaining < 0){
-        remaining += 24;
+        remaining += 24 * 60 * 60 * 1000;
     }
     return remaining;
 }
