@@ -23,8 +23,6 @@ bot.on("ready",async ()=>{
     // check if the current time is a class time
     incaseofbotrestart(Hour);
 
-    run();
-
     // call initialize() once a day
     setTimeout(function(){
         Hour = new Date().getHours();
@@ -62,6 +60,7 @@ function initialize(today,hour){
         }
     }
     for (let i=0;i<missing;i++) {list.shift();}
+    run();
 }
 
 function run(){
@@ -88,16 +87,16 @@ function incaseofbotrestart(hour){
     }
 }
 
-function sendmessage(obj){
+async function sendmessage(obj){
     for (guild in servers){
         try {
             // delete the "Δεν πραγματοποιητε μαθημα" μηνυμα
             if (messages[guild]){
-                bot.channels.cache.get(servers[guild]).messages.fetch(messages[guild].id).delete();
+                //await bot.channels.cache.get(servers[guild]).messages.fetch(messages[guild].id).delete();
             }
             // post the message on the channel
             console.log("sent message");
-            bot.channels.cache.get(servers[guild]).send(
+            await bot.channels.cache.get(servers[guild]).send(
                 new Discord.MessageEmbed()
                 .setTitle("ΤΩΡΑ ΕΧΕΙ ΜΑΘΗΜΑ")
                 .setURL(obj.link)
@@ -113,8 +112,8 @@ function sendmessage(obj){
                 };
             });
             // edit it after the class is done σε "Δεν πραγματοποιητε μαθημα αυτην την στιγμη"
-            bot.setTimeout(function(){
-                bot.channels.cache.get(servers[guild]).messages.fetch(messages[guild].id).then(msg=>{msg.edit(new Discord.MessageEmbed().setTitle("ΤΩΡΑ ΔΕΝ ΕΧΕΙ ΜΑΘΗΜΑ").setColor("#0099ff").setDescription("Δεν πραγματοποιήτε μάθημα αυτην την στιγμή").setTimestamp().setThumbnail("https://images-ext-2.discordapp.net/external/UkX4VyVlMxh6IcSUheoenOeKPdEBzXmRfbj0nx35gdI/https/www.ceid.upatras.gr/sites/all/themes/ceid_theme/logo.png"));});
+            bot.setTimeout(async function(){
+                await bot.channels.cache.get(servers[guild]).messages.fetch(messages[guild].id).then(msg=>{msg.edit(new Discord.MessageEmbed().setTitle("ΤΩΡΑ ΔΕΝ ΕΧΕΙ ΜΑΘΗΜΑ").setColor("#0099ff").setDescription("Δεν πραγματοποιήτε μάθημα αυτην την στιγμή").setTimestamp().setThumbnail("https://images-ext-2.discordapp.net/external/UkX4VyVlMxh6IcSUheoenOeKPdEBzXmRfbj0nx35gdI/https/www.ceid.upatras.gr/sites/all/themes/ceid_theme/logo.png"));});
             },(obj.ending_hour - obj.starting_hour) * 1000 * 60 * 60 );
             list.shift();  
         } catch (err) {console.error(err);}
