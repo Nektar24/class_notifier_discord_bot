@@ -18,28 +18,17 @@ var Hour = now.getHours();
 var Minute = now.getMinutes();
 
 bot.on("ready",async ()=>{
-    // initialization
     initialize(Today,Hour);
-    // check if the current time is a class time
-    incaseofbotrestart(Hour);
-
-    // call initialize() once a day
-    setTimeout(function(){
-        Hour = new Date().getHours();
-        Today = days[new Date().getDay()];
+    bot.setInterval(function(){
         initialize(Today,Hour);
-        bot.setInterval(function(){
-            Hour = new Date().getHours();
-            Today = days[new Date().getDay()];
-            initialize(Today,Hour);
-        },1000*60*60*24);
-    },leftToEight());
-    
+    },1000*60*60*24);
     console.log("The Bot is Online Nek!");
 });
 
 let list = [];
-function initialize(today,hour){
+function initialize(){
+    hour = new Date().getHours();
+    today = days[new Date().getDay()];
     list = [];
     // put all the classes that are due to today in an array
     for (i in data){
