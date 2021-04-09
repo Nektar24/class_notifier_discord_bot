@@ -7,20 +7,12 @@ let messages = {};
 const config = require('./config.json');
 const nektar = config.nektar;
 
-var now = new Date();
-
-// Get Day.
 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-var Today = days[now.getDay()];
-
-// Get Time
-var Hour = now.getHours();
-var Minute = now.getMinutes();
 
 bot.on("ready",async ()=>{
-    initialize(Today,Hour);
+    initialize();
     bot.setInterval(function(){
-        initialize(Today,Hour);
+        initialize();
     },1000*60*60*24);
     console.log("The Bot is Online Nek!");
 });
@@ -40,40 +32,29 @@ function initialize(){
     }
     // sort the array
     list.sort((a,b) => (a.starting_hour > b.starting_hour) ? 1 : ((b.starting_hour > a.starting_hour) ? -1 : 0));
-
-    // remove the classes that we missed for some reason
-    let missing = 0;
-    for (i in list){
-        if (list[i].ending_hour <= hour){
-            missing++;
-        }
-    }
-    for (let i=0;i<missing;i++) {list.shift();}
+    
+    //send all the messages
     run();
 }
 
-function run(){
+async function run(){
+    for (obj of list){
+        await schedule(obj);
+    }
+}
+
+//schedules a class message to be sent
+async function schedule(obj){
     let right_now = new Date();
     let hour = right_now.getHours();
     let minute = right_now.getMinutes();
     let current_time = hour*60 + minute;
-    for (obj of list){
-        console.log("Will post [" + obj.name + "] , in : " + (obj.starting_hour*60 - current_time).toString() + " minutes.");
-        bot.setTimeout(() => {
-            sendmessage(obj);
-            console.log("Posted a message");
-        }, (obj.starting_hour*60 - current_time - 5)*60*1000);
-    }
-}
-
-function incaseofbotrestart(hour){
-    if (list.length == 0) { return;}
-    if (list[0].ending_hour <= hour) {list.shift(); return;}
-    if (list[0].starting_hour <= hour) {
-        console.log("found a class");
-        sendmessage(list[0]);
-        //list.shift();
-    }
+    console.log("Will post [" + obj.name + "] , in : " + (obj.starting_hour*60 - current_time).toString() + " minutes.");
+    bot.setTimeout(() => {
+        sendmessage(obj);
+        console.log("Posted a message");
+    }, (obj.starting_hour*60 - current_time - 5)*60*1000);
+    return true;
 }
 
 async function sendmessage(obj){
@@ -103,19 +84,10 @@ async function sendmessage(obj){
             // edit it after the class is done σε "Δεν πραγματοποιητε μαθημα αυτην την στιγμη"
             bot.setTimeout(async function(){
                 await bot.channels.cache.get(servers[guild]).messages.fetch(messages[guild].id).then(msg=>{msg.edit(new Discord.MessageEmbed().setTitle("ΤΩΡΑ ΔΕΝ ΕΧΕΙ ΜΑΘΗΜΑ").setColor("#0099ff").setDescription("Δεν πραγματοποιήτε μάθημα αυτην την στιγμή").setTimestamp().setThumbnail("https://images-ext-2.discordapp.net/external/UkX4VyVlMxh6IcSUheoenOeKPdEBzXmRfbj0nx35gdI/https/www.ceid.upatras.gr/sites/all/themes/ceid_theme/logo.png"));});
-            },(obj.ending_hour - obj.starting_hour) * 1000 * 60 * 60 );
+            },(obj.ending_hour*60 - obj.starting_hour*60 - 15) * 1000 * 60 );
             list.shift();  
         } catch (err) {console.error(err);}
     }
-}
-
-function leftToEight(){
-    var d = new Date();
-    let remaining = -d + d.setHours(8,0,0,0);
-    if (remaining < 0){
-        remaining += 24 * 60 * 60 * 1000;
-    }
-    return remaining;
 }
 
 bot.on("message",message=>{
