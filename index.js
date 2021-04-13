@@ -17,7 +17,6 @@ bot.on("ready",async ()=>{
     console.log("The Bot is Online Nek!");
 });
 
-let list = [];
 function initialize(){
     hour = new Date().getHours();
     today = days[new Date().getDay()];
@@ -34,10 +33,6 @@ function initialize(){
     list.sort((a,b) => (a.starting_hour > b.starting_hour) ? 1 : ((b.starting_hour > a.starting_hour) ? -1 : 0));
     
     //send all the messages
-    run();
-}
-
-async function run(){
     for (obj of list){
         await schedule(obj);
     }
@@ -85,7 +80,6 @@ async function sendmessage(obj){
             bot.setTimeout(async function(){
                 await bot.channels.cache.get(servers[guild]).messages.fetch(messages[guild].id).then(msg=>{msg.edit(new Discord.MessageEmbed().setTitle("ΤΩΡΑ ΔΕΝ ΕΧΕΙ ΜΑΘΗΜΑ").setColor("#0099ff").setDescription("Δεν πραγματοποιήτε μάθημα αυτην την στιγμή").setTimestamp().setThumbnail("https://images-ext-2.discordapp.net/external/UkX4VyVlMxh6IcSUheoenOeKPdEBzXmRfbj0nx35gdI/https/www.ceid.upatras.gr/sites/all/themes/ceid_theme/logo.png"));});
             },(obj.ending_hour*60 - obj.starting_hour*60 - 15) * 1000 * 60 );
-            list.shift();  
         } catch (err) {console.error(err);}
     }
 }
