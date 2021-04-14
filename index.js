@@ -18,9 +18,8 @@ bot.on("ready",async ()=>{
 });
 
 function initialize(){
-    hour = new Date().getHours();
-    today = days[new Date().getDay()];
-    list = [];
+    let today = days[new Date().getDay()];
+    let list = [];
     // put all the classes that are due to today in an array
     for (i in data){
         for (j in data[i].days){
@@ -34,7 +33,7 @@ function initialize(){
     
     //send all the messages
     for (obj of list){
-        await schedule(obj);
+        schedule(obj);
     }
 }
 
